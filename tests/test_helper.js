@@ -46,7 +46,6 @@ const initialBlogs = [
 const nonExistingId = async () => {
 
   const sampleBlog = {
-    _id: '5a422bc61b54a676234d17fc',
     title: 'Type wars',
     author: 'Robert C. Martin',
     url: 'http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html',
