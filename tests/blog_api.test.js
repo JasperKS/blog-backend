@@ -49,6 +49,59 @@ test('a new blog can be added', async () => {
   assert(contents.includes('Type wars'))
 })
 
+test('a new blog without likes can be added', async () => {
+  const newBlog = {
+    title: 'Blog 1',
+    author: 'Blog 1 Author',
+    url: 'http://google.ca',
+    __v: 0
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+  const blogsAtEnd = await helper.blogsInDb()
+  assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length + 1)
+
+  const blog = blogsAtEnd.find(blog => blog.title === 'Blog 1')
+  assert.strictEqual(blog.likes, 0)
+})
+
+test('a new blog without title cannot be added', async () => {
+  const newBlog = {
+    author: 'Blog No Title Author',
+    url: 'http://google.ca',
+    __v: 0
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(400)
+
+  const blogsAtEnd = await helper.blogsInDb()
+  assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length)
+})
+
+test('a new blog without url cannot be added', async () => {
+  const newBlog = {
+    title: 'Blog No URL',
+    author: 'Blog No URL Author',
+    __v: 0
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(400)
+
+  const blogsAtEnd = await helper.blogsInDb()
+  assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length)
+})
+
 after(async () => {
   await mongoose.connection.close()
 })
