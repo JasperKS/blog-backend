@@ -24,10 +24,10 @@ morgan.token('body', function getBody (req) {
   return JSON.stringify(req.body)
 })
 
-app.use(morgan(':method :url :status :res[content-lenght] - :response-time ms :body'))
+//app.use(morgan(':method :url :status :res[content-lenght] - :response-time ms :body'))
 app.use(cors())
 app.use(express.json())
-app.use(middleware.requestLogger)
+//app.use(middleware.requestLogger)
 app.use('/api/blogs', blogsRouter)
 app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)
