@@ -124,6 +124,25 @@ describe('deletion of a blog', () => {
 })
 
 describe('updating a specific blog', () => {
+  test('success with status code 200 if likes is updated', async () => {
+    const blogsAtStart = await helper.blogsInDb()
+    const blogToEdit = blogsAtStart[0]
+
+    const updatedBlog = {
+      ...blogToEdit,
+      likes: 1337
+    }
+
+    await api
+      .put(`/api/blogs/${blogToEdit.id}`)
+      .send(updatedBlog)
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+
+    const blogInDb = await helper.blogById(blogToEdit.id)
+    assert.strictEqual(blogInDb.likes, updatedBlog.likes)
+  })
+
   test('success with status code 200 if title is updated', async () => {
     const blogsAtStart = await helper.blogsInDb()
     const blogToEdit = blogsAtStart[0]
